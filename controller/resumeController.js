@@ -8,6 +8,9 @@ Keeps controller clean (MVC pattern)
 const createResume = async(req,res)=>{
     try{
         const {email,phoneNumber} = req.body;
+        /*without destructuirng 
+        const email = req.body.email;
+const phoneNumber = req.body.phoneNumber;*/
         const query = `
             SELECT * FROM resumes 
             WHERE email = $1 or phoneNumber = $2"`;
@@ -22,7 +25,7 @@ const createResume = async(req,res)=>{
                 });
             }
             // insert data using model
-            const resume = await resumeModel.createResume(req.body);
+            const resume = await resumeModel.createResume(req.body); //Send full data to model
 
             //success response
             res.status(201).json({
