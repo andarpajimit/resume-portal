@@ -15,18 +15,21 @@ const createResume = async(data)=>{
         interviewDate
     } = data;
 
-    const query = `INSERT INTO resumes ( firstName,
-        lastName,
+    const query = `
+    INSERT INTO resumes (
+        first_name,
+        last_name,
         email,
-        phoneNumber,
+        phone_number,
         skills,
-        projectDescription,
-        appliedPosition,
-        earliestPossibleStartDate,
-        interviewDate)
-        VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)
-        RETURNING *
-        `;
+        project_description,
+        applied_position,
+        earliest_possible_start_date,
+        interview_date
+    )
+    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+    RETURNING *
+`;
 
         /* using place holder in SQL query 
         Prevents SQL Injection

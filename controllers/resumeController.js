@@ -13,7 +13,7 @@ const createResume = async(req,res)=>{
 const phoneNumber = req.body.phoneNumber;*/
         const query = `
             SELECT * FROM resumes 
-            WHERE email = $1 or phoneNumber = $2"`;
+            WHERE email = $1 or phone_number = $2`;
             const values = [email,phoneNumber];
             //execute query
             const checkDuplicate = await pool.query(query,values);
@@ -36,7 +36,7 @@ const phoneNumber = req.body.phoneNumber;*/
         
     }catch(error){
         //Error handling
-        res.staus(500).json({
+        res.status(500).json({
             error:error.message
         });
     }

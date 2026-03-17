@@ -24,7 +24,7 @@ const validateResume = [
     body('firstName').notEmpty().withMessage('First name is required'),
     body('lastName').notEmpty().withMessage('Last name is required'),
     body('email').isEmail().withMessage('Valid email required'),
-    body('phoneNumber').isLength({min:10,max:10}).withMessage('Phone number must be 10 digits'),
+    body('phoneNumber').isNumeric().isLength({ min: 10, max: 10 }),
     body('skills').notEmpty().withMessage('Skills are required'),
     body('appliedPosition').notEmpty().withMessage('Applied position required'),
     body('earliestPossibleStartDate').notEmpty().isDate().withMessage('Start date must be valid'),
@@ -39,7 +39,7 @@ const validateResume = [
     // it will run after all validation
     (req,res,next)=>{
         const errors = validationResult(req);
-        if(!errors.isEmpty){
+        if(!errors.isEmpty()){
             return res.status(400).json({
                 errors : errors.array() // test this during demo
             });
