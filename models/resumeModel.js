@@ -92,3 +92,60 @@ const updateResume = async(id,data) =>{
         return null;
     }
 };
+
+// PATCH (partial update)
+
+
+const patchResume = async(id,data)=>{
+
+    const fieldMap = {
+        firstName: "first_name",
+        lastName: "last_name",
+        email: "email",
+        phoneNumber: "phone_number",
+        skills: "skills",
+        projectDescription: "project_description",
+        appliedPosition: "applied_position",
+        earliestPossibleStartDate: "earliest_possible_start_date",
+        interviewDate: "interview_date"
+    };
+    const fields = Object.keys(data);
+    const setQuery = fields
+        .map((field, index) => `${fieldMap[field]}=$${index + 1}`)
+        .join(', ');
+    const values = Object.values(data);
+    const query = `
+        UPDATE resumes SET ${setQuery}
+        WHERE id=$${fields.length + 1}
+        RETURNING *
+    `;
+    const result = await pool.query(query, [...values, id]);
+
+    if (result.rows[0]) {
+        return mapToCamel(result.rows[0]);
+    } else {
+        return null;
+    }
+};
+
+// DELETE
+const deleteResume = async (id) => {
+    const result = await pool.query(
+        `DELETE FROM resumes WHERE id=$1 RETURNING *`,
+        [id]
+    );
+
+    if (result.rows[0]) {
+        return mapToCamel(result.rows[0]);
+    } else {
+        return null;
+    }
+};
+
+module.exports = {
+    createResume,
+    getResume,
+    updateResume,
+    patchResume,
+    deleteResume
+};
