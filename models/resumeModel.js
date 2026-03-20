@@ -59,10 +59,17 @@ const createResume = async(data) => {
 
 // GET (get data by email or phone number)
 const getResume =   async(email,phoneNumber)=>{
-    const query = `SELECT * FROM resume WHERE email=$1 OR phone_number=$2`;
+    const query = `SELECT * FROM resumes WHERE email=$1 OR phone_number=$2`;
     const values = [email,phoneNumber];
     const result = await pool.query(query,values);
     return result.rows.map((row) => mapToCamel(row))
+};
+
+//GET ALL DATA FROM DB
+
+const getAllResumes = async () => {
+    const result = await pool.query("SELECT * FROM resumes");
+    return result.rows;
 };
 
 // PUT (full update)
@@ -82,7 +89,7 @@ const updateResume = async(id,data) =>{
     const values = [
         firstName, lastName, email, phoneNumber,
         skills, projectDescription, appliedPosition,
-        earliestPossibleStartDate, interviewDate
+        earliestPossibleStartDate, interviewDate,id
     ];
 
     const result = await pool.query(query,values);
@@ -145,6 +152,7 @@ const deleteResume = async (id) => {
 module.exports = {
     createResume,
     getResume,
+    getAllResumes,
     updateResume,
     patchResume,
     deleteResume

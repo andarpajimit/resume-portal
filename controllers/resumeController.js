@@ -42,6 +42,122 @@ const phoneNumber = req.body.phoneNumber;*/
     }
 };
 
+//GET
+const getResume = async (req, res) => {
+    try {
+        const { email, phoneNumber } = req.query;
+
+        if (!email && !phoneNumber) {
+            return res.status(400).json({
+                message: "Provide email or phoneNumber"
+            });
+        }
+
+        // ONLY FETCH (no insert)
+        const data = await resumeModel.getResume(email, phoneNumber);
+
+        if (data.length === 0) {
+            return res.status(404).json({ message: "Not found" });
+        }
+
+        res.status(200).json(data);
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+//GET ALL
+const getAllResumes = async (req, res) => {
+    try {
+        const data = await resumeModel.getAllResumes();
+
+        if (data.length === 0) {
+            return res.status(404).json({
+                message: "No resumes found"
+            });
+        }
+
+        res.status(200).json(data);
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+//PUT
+const updateResume = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const updated = await resumeModel.updateResume(id, req.body);
+
+        if (!updated) {
+            return res.status(404).json({ 
+                message: "Not found" 
+            });
+        }
+
+        res.status(200).json(updated);
+
+    } catch (error) {
+        res.status(500).json({ 
+            error: error.message 
+        });
+    }
+};
+
+// PATCH
+const patchResume = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const updated = await resumeModel.patchResume(id, req.body);
+
+        if (!updated) {
+            return res.status(404).json({ 
+                message: "Not found" 
+            });
+        }
+
+        res.status(200).json({
+            message:"Data Updated Successfully",
+            data : updated
+        });
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// DELETE
+const deleteResume = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const deleted = await resumeModel.deleteResume(id);
+
+        if (!deleted) {
+            return res.status(404).json({ message: "Not found" });
+        }
+
+        res.status(200).json({
+            message: "Deleted successfully",
+            data: deleted
+        });
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
 module.exports = {
-    createResume
+    createResume,
+    getResume,
+    getAllResumes,
+    updateResume,
+    patchResume,
+    deleteResume
 };

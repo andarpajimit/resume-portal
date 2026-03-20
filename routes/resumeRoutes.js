@@ -3,7 +3,7 @@ const router = express.Router();
 
 //const resumeController = require('../controllers/resumeController'); ref-1
 const validateResume = require('../middleware/validationMiddleware'); //imports whole object
-const { createResume, getResume,updateResume,patchResume,deleteResume } = require('../controllers/resumeController'); //extracts only the function
+const { createResume, getResume,getAllResumes,updateResume,patchResume,deleteResume } = require('../controllers/resumeController'); //extracts only the function
 /*Rename while destructuring
 const { createResume: create } = require('../controllers/resumeController');*/
 
@@ -21,6 +21,9 @@ router.post("/apply",
 
 //GET
 router.get('/',getResume);
+
+//GET all
+router.get('/all', getAllResumes);
 
 //PUT
 router.put('/:id', updateResume);
